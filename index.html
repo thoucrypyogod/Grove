@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>QuickGrocer — Local Grocery Delivery</title>
+<title>Grove — Local Grocery Delivery</title>
 <style>
 :root{
   --green:#16a34a;--green-l:#22c55e;--green-d:#14532d;--green-bg:#f0fdf4;--green-50:#dcfce7;
@@ -176,7 +176,7 @@ body{background:var(--gray-l);color:var(--text);font-family:-apple-system,BlinkM
   <div class="auth-box">
     <div class="brand">
       <div class="brand-icon">🛒</div>
-      <div class="brand-name">QuickGrocer</div>
+      <div class="brand-name">Grove</div>
       <div class="brand-tag">Local grocery delivery, fast &amp; easy</div>
     </div>
     <div class="auth-card">
@@ -213,7 +213,7 @@ body{background:var(--gray-l);color:var(--text);font-family:-apple-system,BlinkM
 <div id="appScreen" class="screen">
   <div class="app-header">
     <div style="display:flex;align-items:center">
-      <div class="app-logo">🛒 QuickGrocer</div>
+      <div class="app-logo">🛒 Grove</div>
       <span class="rbadge" id="rbadge">Customer</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px">
@@ -400,8 +400,8 @@ body{background:var(--gray-l);color:var(--text);font-family:-apple-system,BlinkM
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 // ══ CONFIG — paste your Supabase URL and anon key here ══
-const SB_URL='YOUR_SUPABASE_URL';
-const SB_KEY='YOUR_SUPABASE_ANON_KEY';
+const SB_URL='https://gqknwhtgiajxwterqukd.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdxa253aHRnaWFqeHd0ZXJxdWtkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjAyOTc3MywiZXhwIjoyMDkxNjA1NzczfQ.pecLyOvAC1fmw4ZVNwtU8MwLhXhBeFesVFOMhb4f4zc';
 const sb=createClient(SB_URL,SB_KEY);
 
 let U=null,P=null,IC=0,allUsers=[];
