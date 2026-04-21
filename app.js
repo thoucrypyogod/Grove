@@ -286,6 +286,24 @@ window.assignRider=async(orderId,riderId,el)=>{
   await sb.from('orders').update({rider_id:riderId,status:'assigned'}).eq('id',orderId);
   toast('Rider assigned!','ok');closeMod('assignModal');loadAOrders();
 };
+function renderOrder(o,ctx){
+  const isAdmin=ctx==='admin',isRider=ctx==='rider';
+  const showAcceptReject=isRider&&o.status==='assigned';
+  return`<div class="ocard s-${o.status}" onclick="openDetail('${o.id}')">
+    <div class="oheader">
+      <div><div class="fw7" style="font-size:0.88rem">${isAdmin?(o.customer?.name||'Customer'):P.name}</div><div class="oid">#${o.id.slice(-8).toUpperCase()}${isAdmin?'':' · '+fmt(o.created_at)}</div></div>
+      ${sbadge(o.status)}
+    </div>
+    <div class="oaddr">📍 ${o.address}</div>
+    ${(o.order_items||[]).length?`<div class="oitems">${(o.order_items||[]).slice(0,3).map(i=>`<div class="oirow"><span class="oidot">•</span>${i.item_name}${i.quantity&&i.quantity!=='1'?` ×${i.quantity}`:''}</div>`).join('')}${(o.order_items||[]).length>3?`<div class="txt3 txsm">+${(o.order_items||[]).length-3} more</div>`:''}</div>`:''}
+    <div class="ometa">
+      <span class="otime">${isAdmin?fmt(o.created_at):''}</span>
+      ${isAdmin&&o.rider?.name?`<span style="font-size:0.72rem;font-weight:500">🚴 ${o.rider.name}</span>`:''}
+      ${isAdmin&&!o.rider?.name&&o.status==='pending'?`<button class="btn btn-blue btn-sm" onclick="event.stopPropagation();openAssign('${o.id}')">Assign Rider</button>`:''}
+    </div>
+    ${showAcceptReject?`<div style="display:flex;gap:7px;margin-top:10px" onclick="event.stopPropagation()"><button class="btn btn-green" style="flex:1" onclick="acceptOrder('${o.id}')">✅ Accept</button><button class="btn btn-red" style="flex:1" onclick="rejectOrder('${o.id}')">✕ Reject</button></div>`:''}
+  </div>`;
+}
 
 window.adminUpdStatus=async(id,s)=>{
   await sb.from('orders').update({status:s}).eq('id',id);
@@ -310,5 +328,17 @@ window.openDetail=async id=>{
     ${o.note?`<div class="onote mt8">📝 ${o.note}</div>`:''}`;
   const acts=document.getElementById('detailActions');
   if(P.role==='admin'){
-    const ns={pending:'assigned',assigned:'accepted',accepted:'in_progress',in_progress:'delivered'}[o.status];
-    acts.innerHTML=`<button class="btn btn-gray" style="flex:1" onclick="closeMod('detailModal')">Close</button>${o.status==='pending'?`<button class="btn btn-blue" style="flex:2" onclick="closeMod('detailModal');openAssign('${o.id}')">Assign Rider</button>`:''}${ns?`<button class="btn btn-green" style="flex:2" onclick="adminUpdStatus('${o.id}','${ns}');closeMod('detailModal')">→ ${slabel(ns)}</button>`:''}${o.status!=='delivered'&&o.status!=='cancelled'?`<button class="btn btn-red btn-sm" onclick="adminUpdStatus('${o.id}','cancelled');closeMod('detailModal')
+            const ns={pending:'assigned',assigned:'accepted',accepted:'in_progress',in_progress:'delivered'}[o.status];
+    acts.innerHTML=`<button class="btn btn-gray" style="flex:1" onclick="closeMod('detailModal')">Close</button>${o.status==='pending'?`<button class="btn btn-blue" style="flex:2" onclick="closeMod('detailModal');openAssign('${o.id}')">Assign Rider</button>`:''}${ns?`<button class="btn btn-green" style="flex:2" onclick="adminUpdStatus('${o.id}','${ns}');closeMod('detailModal')">→ ${slabel(ns)}</button>`:''}${o.status!=='delivered'&&o.status!=='cancelled'?`<button class="btn btn-red btn-sm" onclick="adminUpdStatus('${o.id}','cancelled');closeMod('detailModal')">Cancel</button>`:''}`;
+  }else{acts.innerHTML=`<button class="btn btn-gray" style="flex:1" onclick="closeMod('detailModal')">Close</button>`;}
+  document.getElementById('detailModal').classList.add('open');
+};
+(async()=>{
+  const{data:{session}}=await sb.auth.getSession();
+  if(session){
+    document.getElementById('authScreen').style.display='none';
+    U=session.user;
+    await loadProfile();
+  }
+})();
+
