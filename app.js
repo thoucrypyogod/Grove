@@ -25,6 +25,23 @@ window.showForgot = () => {
   document.getElementById('loginPanel').style.display = 'none';
   document.getElementById('forgotPanel').style.display = 'block';
 };
+// Check for auth callback (email confirmation, password reset)
+const hash = window.location.hash;
+if (hash.includes('type=recovery') || hash.includes('type=signup')) {
+  // Supabase handles this automatically, just show a message
+  toast('Verifying your email...', 'ok');
+}
+
+// Existing session check
+(async()=>{
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    document.getElementById('authScreen').style.display = 'none';
+    U = session.user;
+    await loadProfile();
+  }
+})();
+
 
 window.showLogin = () => {
   document.getElementById('forgotPanel').style.display = 'none';
