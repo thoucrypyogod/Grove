@@ -47,6 +47,28 @@ window.showLogin = () => {
   document.getElementById('forgotPanel').style.display = 'none';
   document.getElementById('loginPanel').style.display = 'block';
 };
+// Show resend button after registration
+document.getElementById('resendBtn').style.display = 'block';
+
+window.resendEmail = async () => {
+  const email = document.getElementById('remail').value.trim();
+  const msg = document.getElementById('rmsg');
+  
+  try {
+    const { error } = await sb.auth.resend({
+      type: 'signup',
+      email: email
+    });
+    
+    if (error) throw error;
+    
+    msg.textContent = 'Confirmation email resent! Check your inbox.';
+  } catch (err) {
+    msg.className = 'amsg err';
+    msg.textContent = err.message;
+  }
+};
+
 
 window.sendReset = async () => {
   const email = document.getElementById('femail').value.trim();
@@ -68,9 +90,9 @@ window.sendReset = async () => {
     
     if (error) throw error;
     
-    msg.className = 'amsg ok';
-    msg.textContent = 'Reset link sent! Check your email.';
-  } catch (err) {
+    msg.className='amsg ok';msg.textContent='Account created! Verify your email then sign in.';
+document.getElementById('resendBtn').style.display='block';
+
     msg.className = 'amsg err';
     msg.textContent = err.message;
   }
