@@ -21,6 +21,44 @@ window.atab=t=>{
   document.getElementById('loginPanel').style.display=t==='login'?'block':'none';
   document.getElementById('regPanel').style.display=t==='register'?'block':'none';
 };
+window.showForgot = () => {
+  document.getElementById('loginPanel').style.display = 'none';
+  document.getElementById('forgotPanel').style.display = 'block';
+};
+
+window.showLogin = () => {
+  document.getElementById('forgotPanel').style.display = 'none';
+  document.getElementById('loginPanel').style.display = 'block';
+};
+
+window.sendReset = async () => {
+  const email = document.getElementById('femail').value.trim();
+  const msg = document.getElementById('fmsg');
+  
+  if (!email) {
+    msg.className = 'amsg err';
+    msg.textContent = 'Enter your email address.';
+    return;
+  }
+  
+  msg.className = 'amsg';
+  msg.textContent = 'Sending...';
+  
+  try {
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://thoucrypyogod.github.io/Grove/'
+    });
+    
+    if (error) throw error;
+    
+    msg.className = 'amsg ok';
+    msg.textContent = 'Reset link sent! Check your email.';
+  } catch (err) {
+    msg.className = 'amsg err';
+    msg.textContent = err.message;
+  }
+};
+
 
 document.getElementById('regBtn').addEventListener('click',async()=>{
   const name=document.getElementById('rname').value.trim(),email=document.getElementById('remail').value.trim(),phone=document.getElementById('rphone').value.trim(),pass=document.getElementById('rpass').value,role=document.getElementById('rrole').value,msg=document.getElementById('rmsg');
