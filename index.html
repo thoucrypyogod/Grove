@@ -232,6 +232,26 @@
 </div>
 
 <div class="toast" id="toast"></div>
+  <div id="loginPanel">
+  <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="lemail" placeholder="you@email.com"></div>
+  <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="lpass" placeholder="••••••••"></div>
+  <button class="btn btn-green" id="loginBtn">Sign In</button>
+  <div style="text-align:center;margin-top:10px">
+    <button class="lbtn" onclick="showForgot()">Forgot password?</button>
+  </div>
+  <div class="amsg" id="lmsg"></div>
+</div>
+
+<!-- Forgot Password Panel (hidden by default) -->
+<div id="forgotPanel" style="display:none">
+  <div class="fg"><label class="fl">Enter your email</label><input class="fi" type="email" id="femail" placeholder="you@email.com"></div>
+  <button class="btn btn-green" id="forgotBtn" onclick="sendReset()">Send Reset Link</button>
+  <div style="text-align:center;margin-top:10px">
+    <button class="lbtn" onclick="showLogin()">Back to Sign In</button>
+  </div>
+  <div class="amsg" id="fmsg"></div>
+</div>
+  
 <div class="js-error" id="jsError">JavaScript Error: Check Console</div>
 
 <script type="module" src="app.js"></script>
